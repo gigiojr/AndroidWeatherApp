@@ -1,5 +1,6 @@
 package br.com.weatherapp.ui.fragment.home;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,9 +8,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
-import br.com.weatherapp.R;
+import br.com.weatherapp.databinding.FragmentHomeBinding;
+import br.com.weatherapp.util.FragmentListener;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -17,36 +18,40 @@ import br.com.weatherapp.R;
 public class HomeFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private FragmentListener listener;
 
-    private HomeViewModel viewModel;
+    private HomeFragmentViewModel viewModel;
 
-    public static HomeFragment newInstance(int index) {
+    public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(ARG_SECTION_NUMBER, index);
-        fragment.setArguments(bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putInt(ARG_SECTION_NUMBER, index);
+//        fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.viewModel = new HomeViewModel();
-        int index = 1;
-        if (getArguments() != null) {
-            index = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
+        this.viewModel = new HomeFragmentViewModel(this.getContext(), this.listener);
     }
 
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        FragmentHomeBinding binding = FragmentHomeBinding.inflate(inflater, container, false);
+        this.viewModel.setBiding(binding);
 
-        this.viewModel.setRecyclerView(this.getContext(),
-                (RecyclerView) root.findViewById(R.id.recyclerView));
+        return binding.getRoot();
+    }
 
-        return root;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            this.listener = (FragmentListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnArticleSelectedListener");
+        }
     }
 }

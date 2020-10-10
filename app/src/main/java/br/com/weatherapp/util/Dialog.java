@@ -1,4 +1,4 @@
-package br.com.weatherapp.model;
+package br.com.weatherapp.util;
 
 import android.app.AlertDialog;
 import android.content.Context;

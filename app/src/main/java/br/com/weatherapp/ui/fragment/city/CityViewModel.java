@@ -15,7 +15,7 @@ import br.com.openweathermapapi.model.ForecastModel;
 import br.com.openweathermapapi.model.WeatherModel;
 import br.com.weatherapp.R;
 import br.com.weatherapp.databinding.FragmentCityBinding;
-import br.com.weatherapp.model.Dialog;
+import br.com.weatherapp.util.Dialog;
 import br.com.weatherapp.ui.adapter.recycler.cityWeather.CityWeatherRecyclerAdapter;
 import br.com.weatherapp.ui.card.WeatherCard;
 
@@ -32,7 +32,6 @@ public class CityViewModel extends ViewModel implements OpenWeatherMap.RequestCa
     public CityViewModel(Context context, String cityName){
         this.context = context;
         this.cityName = cityName;
-        this.weatherList = new ArrayList<>();
         this.weatherCard = new WeatherCard();
 
         OpenWeatherMap.requestCurrentWeatherByCityName(context, cityName, this);
@@ -43,10 +42,11 @@ public class CityViewModel extends ViewModel implements OpenWeatherMap.RequestCa
         this.biding = biding;
         this.biding.setTitle("Current Weather in " + this.cityName);
         this.biding.setViewModel(this.weatherCard);
-        this.updateRecyclerView();
+        this.setRecyclerView();
     }
 
-    public void updateRecyclerView() {
+    public void setRecyclerView() {
+        this.weatherList = new ArrayList<>();
         this.recyclerView = this.biding.recyclerView;
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
@@ -55,8 +55,7 @@ public class CityViewModel extends ViewModel implements OpenWeatherMap.RequestCa
         CityWeatherRecyclerAdapter recyclerViewAdapter = new CityWeatherRecyclerAdapter(this.weatherList);
         recyclerView.setAdapter(recyclerViewAdapter);
 
-        int visibility = this.weatherList.size() > 0 ? View.VISIBLE : View.GONE;
-        this.biding.progressBar.setVisibility(visibility);
+        this.biding.progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override

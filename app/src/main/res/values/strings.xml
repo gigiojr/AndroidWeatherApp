@@ -6,6 +6,8 @@
     <string name="tab_text_1">List</string>
     <string name="tab_text_2">Map</string>
 
+    <string name="hint_search_city">Search one city</string>
+
     <string name="error_connect_title">Request Error</string>
     <string name="error_connect_text">There was an error when the app made a request. Please verify your internet connection and try again.</string>
 </resources>

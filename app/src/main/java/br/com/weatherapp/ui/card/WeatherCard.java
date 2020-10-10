@@ -21,7 +21,6 @@ public class WeatherCard {
     public String mainHumidity;
 
     public String windSpeed;
-
     public String cloudsAll;
 
     public WeatherCard(){
@@ -41,13 +40,13 @@ public class WeatherCard {
         this.date = weatherModel.getDateFormatted();
         this.weatherIcon = weatherModel.getIconUrl();
         this.weatherDescription = weatherModel.weatherDescription;
-        this.mainTemp = String.valueOf(weatherModel.mainTemp) + " °C";
-        this.mainTempMin = "Min: " + String.valueOf(weatherModel.mainTempMin) + " °C";
-        this.mainTempMax = "Max: " + String.valueOf(weatherModel.mainTempMax) + " °C";
-        this.mainHumidity = "Humidade: " + String.valueOf(weatherModel.mainHumidity) + "%";
-        this.mainPressure = "Pressão: " + String.valueOf(weatherModel.mainPressure) + " hpa";
-        this.windSpeed = "Vento: " + String.valueOf(weatherModel.windSpeed) + "m/s";
-        this.cloudsAll = "Núvens: " + String.valueOf(weatherModel.cloudsAll) + "%";
+        this.mainTemp =weatherModel.mainTemp + " °C";
+        this.mainTempMin = "Min: " + weatherModel.mainTempMin + " °C";
+        this.mainTempMax = "Max: " + weatherModel.mainTempMax + " °C";
+        this.mainHumidity = "humidity: " + weatherModel.mainHumidity + "%";
+        this.mainPressure = "Pressão: " + weatherModel.mainPressure + " hpa";
+        this.windSpeed = "Wind: " + weatherModel.windSpeed + "m/s";
+        this.cloudsAll = "Núvens: " + weatherModel.cloudsAll + "%";
     }
 
     public int getShowLoad(){

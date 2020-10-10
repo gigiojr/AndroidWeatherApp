@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.weatherapp.databinding.CardCityBinding;
 import br.com.weatherapp.ui.card.CityCard;
 
-public class CityViewHolder  extends RecyclerView.ViewHolder {
+public class CityViewHolder extends RecyclerView.ViewHolder {
 
     private CardCityBinding binding;
 

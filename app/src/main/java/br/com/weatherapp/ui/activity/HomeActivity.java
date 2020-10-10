@@ -5,23 +5,27 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.view.View;
 
 import br.com.weatherapp.R;
-import br.com.weatherapp.ui.fragment.home.HomePagerAdapter;
+import br.com.weatherapp.util.FragmentListener;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements FragmentListener {
+
+    private HomeActivityViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        HomePagerAdapter homePagerAdapter = new HomePagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(homePagerAdapter);
+
+//        ViewPager viewPager = findViewById(R.id.view_pager);
+        this.viewModel = new HomeActivityViewModel(this, getSupportFragmentManager());
+
+//        viewPager.setCurrentItem(1);
 //        TabLayout tabs = findViewById(R.id.tabs);
 //        tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -33,5 +37,10 @@ public class HomeActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    @Override
+    public void onUpdateFragment(Fragment fragment) {
+        this.viewModel.updateFragment(fragment);
     }
 }

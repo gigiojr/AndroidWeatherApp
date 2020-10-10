@@ -17,6 +17,10 @@ public class CityRecyclerAdapter extends RecyclerView.Adapter<CityViewHolder> {
         this.list = list;
     }
 
+    public void setList(List<CityCard> list) {
+        this.list = list;
+    }
+
     @Override
     public CityViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
