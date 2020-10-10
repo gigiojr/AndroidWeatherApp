@@ -16,7 +16,7 @@ public class CityFragment extends Fragment {
 
     private static final String ARG_CITY = "city_name";
 
-    private CityViewModel viewModel;
+    private CityFragmentViewModel viewModel;
 
     public static CityFragment newInstance(String cityName) {
         CityFragment fragment = new CityFragment();
@@ -33,7 +33,7 @@ public class CityFragment extends Fragment {
         if (getArguments() != null) {
             cityName = getArguments().getString(ARG_CITY);
         }
-        this.viewModel = new CityViewModel(this.getContext(), cityName);
+        this.viewModel = new CityFragmentViewModel(this.getContext(), cityName);
     }
 
     @Override

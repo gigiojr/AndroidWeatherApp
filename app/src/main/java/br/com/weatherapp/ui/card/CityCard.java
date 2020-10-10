@@ -2,26 +2,25 @@ package br.com.weatherapp.ui.card;
 
 import android.view.View;
 
+import br.com.weatherapp.model.City;
+
 /**
  * ViewModel class
  * Layout: layout/card_city.xml
  */
 public class CityCard {
 
-    public String city;
+    public City city;
     public CityCardListener listener;
 
-    public CityCard(String city, CityCardListener listener){
+    public CityCard(City city, CityCardListener listener){
         this.city = city;
         this.listener = listener;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
+    public CityCard(String city, CityCardListener listener){
+        this.city = new City(city, null, null);
+        this.listener = listener;
     }
 
     public void onCityClick(View v){

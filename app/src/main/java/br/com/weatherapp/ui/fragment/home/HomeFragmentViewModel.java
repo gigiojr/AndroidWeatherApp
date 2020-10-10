@@ -1,6 +1,7 @@
 package br.com.weatherapp.ui.fragment.home;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.weatherapp.databinding.FragmentHomeBinding;
-import br.com.weatherapp.util.Dialog;
+import br.com.weatherapp.model.City;
+import br.com.weatherapp.model.CityDb;
 import br.com.weatherapp.util.FragmentListener;
 import br.com.weatherapp.ui.card.CityCard;
 import br.com.weatherapp.ui.adapter.recycler.cityList.CityRecyclerAdapter;
@@ -33,11 +35,23 @@ public class HomeFragmentViewModel extends ViewModel
     public HomeFragmentViewModel(Context context, FragmentListener listener){
         this.context = context;
         this.listener = listener;
-        this.cityList = new ArrayList<>();
         this.field = new FieldButtonComponent(this);
+        this.getFavorites();
+    }
 
-        cityList.add(new CityCard("London", this));
-        cityList.add(new CityCard("Lisboa", this));
+    public void getFavorites(){
+        this.cityList = new ArrayList<>();
+        CityDb db = new CityDb(this.context);
+        List<City> list = db.getList();
+        for (City city : list) {
+            this.cityList.add(new CityCard(city, this));
+        }
+        db.close();
+    }
+
+    public void updateData() {
+        this.getFavorites();
+        this.setRecyclerView(this.cityList);
     }
 
     public void setRecyclerView(List<CityCard> cityList) {
@@ -61,7 +75,7 @@ public class HomeFragmentViewModel extends ViewModel
         } else{
             list = new ArrayList<>();
             for (CityCard cityCard : this.cityList){
-                if(cityCard.city.contains(value)){
+                if(cityCard.city.name.contains(value)){
                     list.add(cityCard);
                 }
             }
@@ -77,12 +91,15 @@ public class HomeFragmentViewModel extends ViewModel
 
     @Override
     public void onCityClick(CityCard card) {
-        CityFragment fragment = CityFragment.newInstance(card.city);
+        CityFragment fragment = CityFragment.newInstance(card.city.name);
         this.listener.onUpdateFragment(fragment);
     }
 
     @Override
     public void onDeleteClick(CityCard card) {
-
+        CityDb db = new CityDb(this.context);
+        db.delete(card.city._id);
+        db.close();
+        this.updateData();
     }
 }

@@ -1,14 +1,24 @@
 package br.com.weatherapp.ui.card;
 
+import android.graphics.drawable.Drawable;
 import android.view.View;
 
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+import androidx.databinding.BindingAdapter;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import br.com.openweathermapapi.model.WeatherModel;
+import br.com.weatherapp.BR;
 
 /**
  * ViewModel class
  * Layout: layout/card_weather.xml
  */
-public class WeatherCard {
+public class WeatherCard extends BaseObservable {
+
+    public Boolean favorite;
 
     public String date;
     public String weatherIcon;
@@ -23,7 +33,12 @@ public class WeatherCard {
     public String windSpeed;
     public String cloudsAll;
 
-    public WeatherCard(){
+    public Double latitude;
+    public Double longitude;
+
+    private WeatherCardListener listener;
+
+    public WeatherCard(WeatherCardListener listener){
         this.date = "";
         this.weatherIcon = "";
         this.weatherDescription = "";
@@ -34,9 +49,11 @@ public class WeatherCard {
         this.mainPressure = "";
         this.windSpeed = "";
         this.cloudsAll = "";
+        this.favorite = false;
+        this.listener = listener;
     }
 
-    public WeatherCard(WeatherModel weatherModel){
+    public WeatherCard(WeatherModel weatherModel, WeatherCardListener listener){
         this.date = weatherModel.getDateFormatted();
         this.weatherIcon = weatherModel.getIconUrl();
         this.weatherDescription = weatherModel.weatherDescription;
@@ -47,6 +64,15 @@ public class WeatherCard {
         this.mainPressure = "Pressão: " + weatherModel.mainPressure + " hpa";
         this.windSpeed = "Wind: " + weatherModel.windSpeed + "m/s";
         this.cloudsAll = "Núvens: " + weatherModel.cloudsAll + "%";
+        this.latitude = weatherModel.latitude;
+        this.longitude = weatherModel.longitude;
+        this.favorite = false;
+        this.listener = listener;
+    }
+
+    @BindingAdapter("app:srcCompat")
+    public static void bindSrcCompat(FloatingActionButton actionButton, Drawable drawable){
+        actionButton.setImageDrawable(drawable);
     }
 
     public int getShowLoad(){
@@ -56,5 +82,24 @@ public class WeatherCard {
 
     public boolean validFields(String field){
         return field != null && !field.isEmpty();
+    }
+
+    public void onFavoriteClick(View v){
+        this.setFavorite(!this.favorite);
+        this.listener.onFavoriteClick(this);
+    }
+
+    @Bindable
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
+        notifyPropertyChanged(BR.favorite);
+    }
+
+    public interface WeatherCardListener{
+        void onFavoriteClick(WeatherCard card);
     }
 }

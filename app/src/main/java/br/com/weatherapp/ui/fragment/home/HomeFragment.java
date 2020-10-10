@@ -46,6 +46,12 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        this.viewModel.updateData();
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {

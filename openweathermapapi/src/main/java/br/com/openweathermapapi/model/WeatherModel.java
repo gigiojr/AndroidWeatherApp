@@ -33,6 +33,10 @@ public class WeatherModel {
     private static final String LABEL_CLOUDS = "clouds"; // Cloudiness, %
     private static final String LABEL_CLOUDS_ALL = "all";
 
+    private static final String LABEL_COORD = "coord"; // Coord object
+    private static final String LABEL_COORD_LAT = "lon"; // Latitude
+    private static final String LABEL_COORD_LNG = "lat"; // Longitude
+
     public Date date;
 
     public String weatherMain;
@@ -49,11 +53,14 @@ public class WeatherModel {
 
     public int cloudsAll;
 
+    public Double latitude;
+    public Double longitude;
+
     public WeatherModel(JSONObject json) throws JSONException {
         this.date = new Date(json.getLong(LABEL_DATA) * 1000);
 
         JSONArray weatherArray = json.getJSONArray(LABEL_WEATHER);
-        if(weatherArray != null && weatherArray.length() > 0){
+        if(weatherArray.length() > 0){
             JSONObject weather = weatherArray.getJSONObject(0);
             this.weatherMain = weather.getString(LABEL_WEATHER_MAIN);
             this.weatherIcon = weather.getString(LABEL_WEATHER_ICON);
@@ -61,7 +68,7 @@ public class WeatherModel {
         }
 
         JSONObject main = json.getJSONObject(LABEL_MAIN);
-        if(main != null){
+        if(main.has(LABEL_MAIN_TEMP)){
             this.mainTemp = main.getInt(LABEL_MAIN_TEMP);
             this.mainTempMin = main.getInt(LABEL_MAIN_TEMP_MIN);
             this.mainTempMax = main.getInt(LABEL_MAIN_TEMP_MAX);
@@ -70,13 +77,21 @@ public class WeatherModel {
         }
 
         JSONObject wind = json.getJSONObject(LABEL_WIND);
-        if(wind != null){
+        if(wind.has(LABEL_WIND_SPEED)){
             this.windSpeed = wind.getInt(LABEL_WIND_SPEED);
         }
 
         JSONObject clouds = json.getJSONObject(LABEL_CLOUDS);
-        if(clouds != null){
+        if(clouds.has(LABEL_CLOUDS_ALL)){
             this.cloudsAll = clouds.getInt(LABEL_CLOUDS_ALL);
+        }
+
+        if(json.has(LABEL_COORD)) {
+            JSONObject coord = json.getJSONObject(LABEL_COORD);
+            if (coord.has(LABEL_COORD_LAT) && coord.has(LABEL_COORD_LNG)) {
+                this.latitude = coord.getDouble(LABEL_COORD_LAT);
+                this.longitude = coord.getDouble(LABEL_COORD_LNG);
+            }
         }
     }
 
