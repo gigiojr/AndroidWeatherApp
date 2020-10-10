@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.weatherapp.ui.card.CityCard;
-import br.com.weatherapp.ui.recycler.CityRecyclerAdapter;
+import br.com.weatherapp.ui.adapter.recycler.cityList.CityRecyclerAdapter;
 
 public class HomeViewModel extends ViewModel {
 
@@ -34,7 +34,6 @@ public class HomeViewModel extends ViewModel {
 
     public void setRecyclerView(Context context, RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
-        recyclerView.setHasFixedSize(true);
 
         layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);

@@ -88,7 +88,7 @@ public class WeatherModel {
         }
     }
 
-    public String getDateFormated(){
+    public String getDateFormatted(){
         if(this.date != null) {
             return (String) DateFormat.format("dd/MM/yyyy - hh:mm", this.date);
         }

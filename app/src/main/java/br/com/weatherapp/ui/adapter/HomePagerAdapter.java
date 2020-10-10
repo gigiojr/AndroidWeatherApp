@@ -1,4 +1,4 @@
-package br.com.weatherapp.ui.fragment.home;
+package br.com.weatherapp.ui.adapter;
 
 import android.content.Context;
 
@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import br.com.weatherapp.R;
+import br.com.weatherapp.ui.fragment.city.CityFragment;
+import br.com.weatherapp.ui.fragment.home.HomeFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -29,7 +31,14 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return HomeFragment.newInstance(position + 1);
+        switch (position){
+            case 0:
+                return HomeFragment.newInstance(position);
+            case 1:
+                return CityFragment.newInstance("London");
+            default:
+                return HomeFragment.newInstance(position);
+        }
     }
 
     @Nullable

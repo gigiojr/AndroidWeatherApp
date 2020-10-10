@@ -18,7 +18,7 @@ public class HomeFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    private HomeViewModel homeViewModel;
+    private HomeViewModel viewModel;
 
     public static HomeFragment newInstance(int index) {
         HomeFragment fragment = new HomeFragment();
@@ -31,7 +31,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.homeViewModel = new HomeViewModel();
+        this.viewModel = new HomeViewModel();
         int index = 1;
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        this.homeViewModel.setRecyclerView(this.getContext(),
+        this.viewModel.setRecyclerView(this.getContext(),
                 (RecyclerView) root.findViewById(R.id.recyclerView));
 
         return root;

@@ -1,4 +1,4 @@
-package br.com.weatherapp.ui.recycler;
+package br.com.weatherapp.ui.adapter.recycler.cityList;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
