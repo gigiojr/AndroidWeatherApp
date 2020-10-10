@@ -1,14 +1,6 @@
 package br.com.weatherapp.ui.card;
 
-import android.databinding.BindingAdapter;
-import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
-
 import br.com.openweathermapapi.model.WeatherModel;
-import br.com.weatherapp.BR;
-import br.com.weatherapp.R;
 
 /**
  * ViewModel class
@@ -41,32 +33,5 @@ public class WeatherCardViewModel {
         this.mainPressure = "Pressão: " + String.valueOf(weatherModel.mainPressure) + " hpa";
         this.windSpeed = "Vento: " + String.valueOf(weatherModel.windSpeed) + "m/s";
         this.cloudsAll = "Núvens: " + String.valueOf(weatherModel.cloudsAll) + "%";
-    }
-
-    /**
-     * Controller of ImageView image.
-     *
-     * @param view ImageView component.
-     * @param imageUrl Url of image.
-     * @param imageError Image used when image in imageUrl is not available.
-     */
-    @BindingAdapter({"imageUrl", "imageError"})
-    public static void loadImage(ImageView view, String imageUrl, Drawable imageError) {
-        if(!imageUrl.isEmpty()) {
-            Picasso.get().load(imageUrl).error(imageError).into(view);
-        }
-    }
-
-    //********************************************************************************************//
-    // Interface: RecycleMultiLayoutInterface
-    //********************************************************************************************//
-    @Override
-    public int getVariable() {
-        return BR.viewModel; // Variable of layout
-    }
-
-    @Override
-    public int getLayout() {
-        return R.layout.card_weather; // Layout
     }
 }
