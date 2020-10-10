@@ -1,39 +1,52 @@
 package br.com.weatherapp.ui.fragment.home;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import br.com.weatherapp.R;
 
+/**
+ * A placeholder fragment containing a simple view.
+ */
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel mViewModel;
+    private static final String ARG_SECTION_NUMBER = "section_number";
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
+    private HomeViewModel homeViewModel;
+
+    public static HomeFragment newInstance(int index) {
+        HomeFragment fragment = new HomeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(ARG_SECTION_NUMBER, index);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main_fragment, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.homeViewModel = new HomeViewModel();
+        int index = 1;
+        if (getArguments() != null) {
+            index = getArguments().getInt(ARG_SECTION_NUMBER);
+        }
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        // TODO: Use the ViewModel
-    }
+    public View onCreateView(
+            @NonNull LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
 
+        this.homeViewModel.setRecyclerView(this.getContext(),
+                (RecyclerView) root.findViewById(R.id.recyclerView));
+
+        return root;
+    }
 }
