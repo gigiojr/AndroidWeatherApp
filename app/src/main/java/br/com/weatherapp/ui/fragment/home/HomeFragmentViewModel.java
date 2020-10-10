@@ -1,7 +1,8 @@
 package br.com.weatherapp.ui.fragment.home;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.util.Log;
+import android.content.DialogInterface;
 
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,9 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.weatherapp.R;
 import br.com.weatherapp.databinding.FragmentHomeBinding;
 import br.com.weatherapp.model.City;
 import br.com.weatherapp.model.CityDb;
+import br.com.weatherapp.util.Dialog;
 import br.com.weatherapp.util.FragmentListener;
 import br.com.weatherapp.ui.card.CityCard;
 import br.com.weatherapp.ui.adapter.recycler.cityList.CityRecyclerAdapter;
@@ -96,10 +99,24 @@ public class HomeFragmentViewModel extends ViewModel
     }
 
     @Override
-    public void onDeleteClick(CityCard card) {
-        CityDb db = new CityDb(this.context);
-        db.delete(card.city._id);
-        db.close();
-        this.updateData();
+    public void onDeleteClick(final CityCard card) {
+        AlertDialog.Builder dialog = Dialog.createAlertDialog(this.context,
+                this.context.getResources().getString(R.string.confirm_delete_title),
+                this.context.getResources().getString(R.string.confirm_delete_text));
+
+        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                CityDb db = new CityDb(context);
+                db.delete(card.city._id);
+                db.close();
+                updateData();
+            }
+        });
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
     }
 }

@@ -10,4 +10,7 @@
 
     <string name="error_connect_title">Request Error</string>
     <string name="error_connect_text">There was an error when the app made a request. Please verify your internet connection and try again.</string>
+
+    <string name="confirm_delete_title">Delete Favorite</string>
+    <string name="confirm_delete_text">The city register will be removed permanently. Would you like to continue?</string>
 </resources>
