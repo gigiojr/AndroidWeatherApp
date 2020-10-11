@@ -15,6 +15,7 @@ import br.com.weatherapp.R;
 import br.com.weatherapp.databinding.FragmentHomeBinding;
 import br.com.weatherapp.model.City;
 import br.com.weatherapp.model.CityDb;
+import br.com.weatherapp.ui.fragment.maps.MapsFragment;
 import br.com.weatherapp.util.Dialog;
 import br.com.weatherapp.util.FragmentListener;
 import br.com.weatherapp.ui.card.CityCard;
@@ -94,7 +95,7 @@ public class HomeFragmentViewModel extends ViewModel
 
     @Override
     public void onCityClick(CityCard card) {
-        CityFragment fragment = CityFragment.newInstance(card.city.name);
+        CityFragment fragment = CityFragment.newInstance(card.city);
         this.listener.onUpdateFragment(fragment);
     }
 
@@ -118,5 +119,11 @@ public class HomeFragmentViewModel extends ViewModel
             }
         });
         dialog.show();
+    }
+
+    @Override
+    public void onMapClick(CityCard card) {
+        MapsFragment fragment = MapsFragment.newInstance(card.city);
+        this.listener.onUpdateFragment(fragment);
     }
 }

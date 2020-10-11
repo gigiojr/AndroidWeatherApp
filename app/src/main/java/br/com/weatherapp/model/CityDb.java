@@ -36,7 +36,7 @@ public class CityDb {
 
         String[] projection = { COLUMN_ID, COLUMN_NAME, COLUMN_LATITUDE, COLUMN_LONGITUDE };
 
-        String sortOrder = COLUMN_NAME + " DESC";
+        String sortOrder = COLUMN_NAME + " ASC";
         Cursor cursor = db.query(TABLE_NAME, projection, null,
                 null, null, null, sortOrder);
 

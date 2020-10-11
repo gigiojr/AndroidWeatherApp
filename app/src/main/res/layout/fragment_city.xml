@@ -6,6 +6,8 @@
 
     <data>
         <variable name="title" type="String" />
+        <variable name="favorite" type="Boolean" />
+        <variable name="onFavoriteClick" type="android.view.View.OnClickListener" />
         <variable name="viewModel" type="br.com.weatherapp.ui.card.WeatherCard" />
     </data>
 
@@ -83,7 +85,7 @@
             android:layout_margin="@dimen/fab_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:onClick="@{viewModel::onFavoriteClick}"
-            app:srcCompat="@{viewModel.favorite ? @android:drawable/btn_star_big_on : @android:drawable/btn_star_big_off}" />
+            android:onClick="@{onFavoriteClick}"
+            app:srcCompat="@{favorite ? @android:drawable/btn_star_big_on : @android:drawable/btn_star_big_off}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

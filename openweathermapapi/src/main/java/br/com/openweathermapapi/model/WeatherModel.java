@@ -34,8 +34,8 @@ public class WeatherModel {
     private static final String LABEL_CLOUDS_ALL = "all";
 
     private static final String LABEL_COORD = "coord"; // Coord object
-    private static final String LABEL_COORD_LAT = "lon"; // Latitude
-    private static final String LABEL_COORD_LNG = "lat"; // Longitude
+    private static final String LABEL_COORD_LAT = "lat"; // Latitude
+    private static final String LABEL_COORD_LNG = "lon"; // Longitude
 
     public Date date;
 

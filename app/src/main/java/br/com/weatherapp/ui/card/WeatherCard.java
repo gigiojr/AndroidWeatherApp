@@ -17,9 +17,6 @@ import br.com.weatherapp.BR;
  * Layout: layout/card_weather.xml
  */
 public class WeatherCard extends BaseObservable {
-
-    public Boolean favorite;
-
     public String date;
     public String weatherIcon;
     public String weatherDescription;
@@ -36,9 +33,7 @@ public class WeatherCard extends BaseObservable {
     public Double latitude;
     public Double longitude;
 
-    private WeatherCardListener listener;
-
-    public WeatherCard(WeatherCardListener listener){
+    public WeatherCard(){
         this.date = "";
         this.weatherIcon = "";
         this.weatherDescription = "";
@@ -49,11 +44,9 @@ public class WeatherCard extends BaseObservable {
         this.mainPressure = "";
         this.windSpeed = "";
         this.cloudsAll = "";
-        this.favorite = false;
-        this.listener = listener;
     }
 
-    public WeatherCard(WeatherModel weatherModel, WeatherCardListener listener){
+    public WeatherCard(WeatherModel weatherModel){
         this.date = weatherModel.getDateFormatted();
         this.weatherIcon = weatherModel.getIconUrl();
         this.weatherDescription = weatherModel.weatherDescription;
@@ -61,13 +54,11 @@ public class WeatherCard extends BaseObservable {
         this.mainTempMin = "Min: " + weatherModel.mainTempMin + " °C";
         this.mainTempMax = "Max: " + weatherModel.mainTempMax + " °C";
         this.mainHumidity = "humidity: " + weatherModel.mainHumidity + "%";
-        this.mainPressure = "Pressão: " + weatherModel.mainPressure + " hpa";
+        this.mainPressure = "Pressure: " + weatherModel.mainPressure + " hpa";
         this.windSpeed = "Wind: " + weatherModel.windSpeed + "m/s";
-        this.cloudsAll = "Núvens: " + weatherModel.cloudsAll + "%";
+        this.cloudsAll = "Clouds: " + weatherModel.cloudsAll + "%";
         this.latitude = weatherModel.latitude;
         this.longitude = weatherModel.longitude;
-        this.favorite = false;
-        this.listener = listener;
     }
 
     @BindingAdapter("app:srcCompat")
@@ -82,24 +73,5 @@ public class WeatherCard extends BaseObservable {
 
     public boolean validFields(String field){
         return field != null && !field.isEmpty();
-    }
-
-    public void onFavoriteClick(View v){
-        this.setFavorite(!this.favorite);
-        this.listener.onFavoriteClick(this);
-    }
-
-    @Bindable
-    public Boolean getFavorite() {
-        return favorite;
-    }
-
-    public void setFavorite(Boolean favorite) {
-        this.favorite = favorite;
-        notifyPropertyChanged(BR.favorite);
-    }
-
-    public interface WeatherCardListener{
-        void onFavoriteClick(WeatherCard card);
     }
 }

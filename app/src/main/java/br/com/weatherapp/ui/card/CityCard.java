@@ -27,6 +27,10 @@ public class CityCard {
         this.listener.onCityClick(this);
     }
 
+    public void onMapClick(View v){
+        this.listener.onMapClick(this);
+    }
+
     public void onDeleteClick(View v){
         this.listener.onDeleteClick(this);
     }
@@ -34,5 +38,6 @@ public class CityCard {
     public interface CityCardListener{
         void onCityClick(CityCard card);
         void onDeleteClick(CityCard card);
+        void onMapClick(CityCard card);
     }
 }

@@ -1,7 +1,6 @@
 package br.com.weatherapp.ui.fragment.city;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.ViewModel;
@@ -23,12 +22,13 @@ import br.com.weatherapp.ui.adapter.recycler.cityWeather.CityWeatherRecyclerAdap
 import br.com.weatherapp.ui.card.WeatherCard;
 
 public class CityFragmentViewModel extends ViewModel
-        implements OpenWeatherMap.RequestCallback, WeatherCard.WeatherCardListener {
+        implements OpenWeatherMap.RequestCallback, View.OnClickListener {
 
     private Context context;
     private String cityName;
+    private City city;
 
-    private FragmentCityBinding biding;
+    private FragmentCityBinding binding;
     private WeatherCard weatherCard;
     private List<WeatherCard> weatherList;
     private RecyclerView recyclerView;
@@ -36,22 +36,34 @@ public class CityFragmentViewModel extends ViewModel
     public CityFragmentViewModel(Context context, String cityName){
         this.context = context;
         this.cityName = cityName;
-        this.weatherCard = new WeatherCard(this);
+        this.weatherCard = new WeatherCard();
 
         OpenWeatherMap.requestCurrentWeatherByCityName(context, cityName, this);
         OpenWeatherMap.requestForecastWeatherByCityName(context, cityName, this);
     }
 
-    public void setBiding(FragmentCityBinding biding) {
-        this.biding = biding;
-        this.biding.setTitle("Current Weather in " + this.cityName);
-        this.biding.setViewModel(this.weatherCard);
+    public CityFragmentViewModel(Context context, City city){
+        this.context = context;
+        this.city = city;
+        this.cityName = city.name;
+        this.weatherCard = new WeatherCard();
+
+        OpenWeatherMap.requestCurrentWeatherByCityName(context, cityName, this);
+        OpenWeatherMap.requestForecastWeatherByCityName(context, cityName, this);
+    }
+
+    public void setBinding(FragmentCityBinding binding) {
+        this.binding = binding;
+        this.binding.setTitle("Current Weather in " + this.cityName);
+        this.binding.setViewModel(this.weatherCard);
+        this.binding.setOnFavoriteClick(this);
+        this.binding.setFavorite(this.city != null);
         this.setRecyclerView();
     }
 
     public void setRecyclerView() {
         this.weatherList = new ArrayList<>();
-        this.recyclerView = this.biding.recyclerView;
+        this.recyclerView = this.binding.recyclerView;
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
@@ -59,25 +71,26 @@ public class CityFragmentViewModel extends ViewModel
         CityWeatherRecyclerAdapter recyclerViewAdapter = new CityWeatherRecyclerAdapter(this.weatherList);
         recyclerView.setAdapter(recyclerViewAdapter);
 
-        this.biding.progressBar.setVisibility(View.VISIBLE);
+        this.binding.progressBar.setVisibility(View.VISIBLE);
+        this.binding.executePendingBindings();
     }
 
     @Override
     public void requestSuccess(WeatherModel weatherModel) {
-        this.weatherCard = new WeatherCard(weatherModel, this);
-        this.biding.setViewModel(this.weatherCard);
+        this.weatherCard = new WeatherCard(weatherModel);
+        this.binding.setViewModel(this.weatherCard);
     }
 
     @Override
     public void requestSuccess(ForecastModel forecastModel) {
         for (WeatherModel weatherModel : forecastModel.weatherModelList) {
-            this.weatherList.add(new WeatherCard(weatherModel, this));
+            this.weatherList.add(new WeatherCard(weatherModel));
         }
         CityWeatherRecyclerAdapter recyclerViewAdapter = new CityWeatherRecyclerAdapter(this.weatherList);
         this.recyclerView.setAdapter(recyclerViewAdapter);
 
         int visibility = this.weatherList.size() > 0 ? View.GONE : View.VISIBLE;
-        this.biding.progressBar.setVisibility(visibility);
+        this.binding.progressBar.setVisibility(visibility);
     }
 
     @Override
@@ -88,10 +101,33 @@ public class CityFragmentViewModel extends ViewModel
     }
 
     @Override
-    public void onFavoriteClick(WeatherCard card) {
-        City city = new City(this.cityName, card.latitude, card.longitude);
+    public void onClick(View v) {
+        if(city != null){
+            this.deleteCity();
+        } else{
+            this.insertCity();
+        }
+    }
+
+    private void insertCity(){
+        City city = new City(this.cityName, weatherCard.latitude, weatherCard.longitude);
         CityDb db = new CityDb(this.context);
-        long ret = db.insert(city);
+        long id = db.insert(city);
+        if(id > 0){
+            city._id = id;
+            this.city = city;
+            this.binding.setFavorite(true);
+            this.binding.executePendingBindings();
+        }
         db.close();
+    }
+
+    private void deleteCity(){
+        CityDb db = new CityDb(this.context);
+        db.delete(city._id);
+        db.close();
+        this.city = null;
+        this.binding.setFavorite(false);
+        this.binding.executePendingBindings();
     }
 }
