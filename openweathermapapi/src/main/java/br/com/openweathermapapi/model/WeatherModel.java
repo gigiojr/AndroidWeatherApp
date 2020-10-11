@@ -37,6 +37,9 @@ public class WeatherModel {
     private static final String LABEL_COORD_LAT = "lat"; // Latitude
     private static final String LABEL_COORD_LNG = "lon"; // Longitude
 
+    private static final String LABEL_SYS = "sys"; // Sys object
+    private static final String LABEL_SYS_NAME = "name"; // City name
+
     public Date date;
 
     public String weatherMain;
@@ -53,6 +56,7 @@ public class WeatherModel {
 
     public int cloudsAll;
 
+    public String cityName;
     public Double latitude;
     public Double longitude;
 
@@ -91,6 +95,13 @@ public class WeatherModel {
             if (coord.has(LABEL_COORD_LAT) && coord.has(LABEL_COORD_LNG)) {
                 this.latitude = coord.getDouble(LABEL_COORD_LAT);
                 this.longitude = coord.getDouble(LABEL_COORD_LNG);
+            }
+        }
+
+        if(json.has(LABEL_SYS)) {
+            JSONObject sys = json.getJSONObject(LABEL_SYS);
+            if (sys.has(LABEL_SYS_NAME)) {
+                this.cityName = sys.getString(LABEL_SYS_NAME);
             }
         }
     }

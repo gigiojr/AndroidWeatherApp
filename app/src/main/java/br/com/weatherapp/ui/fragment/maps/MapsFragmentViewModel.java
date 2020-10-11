@@ -12,7 +12,8 @@ import br.com.weatherapp.model.City;
 import br.com.weatherapp.ui.fragment.city.CityFragment;
 import br.com.weatherapp.util.FragmentListener;
 
-public class MapsFragmentViewModel extends ViewModel implements GoogleMap.OnMarkerClickListener {
+public class MapsFragmentViewModel extends ViewModel
+        implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener {
 
     private FragmentListener listener;
     private GoogleMap googleMap;
@@ -29,6 +30,7 @@ public class MapsFragmentViewModel extends ViewModel implements GoogleMap.OnMark
         LatLng position = new LatLng(city.latitude, city.longitude);
         this.googleMap.addMarker(new MarkerOptions().position(position).title(city.name));
         this.googleMap.setOnMarkerClickListener(this);
+        this.googleMap.setOnMapLongClickListener(this);
         this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
     }
 
@@ -37,5 +39,11 @@ public class MapsFragmentViewModel extends ViewModel implements GoogleMap.OnMark
         CityFragment fragment = CityFragment.newInstance(this.city);
         this.listener.onUpdateFragment(fragment);
         return false;
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        CityFragment fragment = CityFragment.newInstance(latLng);
+        this.listener.onUpdateFragment(fragment);
     }
 }

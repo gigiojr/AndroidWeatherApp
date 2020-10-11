@@ -53,7 +53,46 @@ public class OpenWeatherMap {
      */
     public void requestForecastWeatherByCityName(Context context, String cityName,
                                                         final RequestCallback callback){
+        cityName = cityName.replaceAll(" ", "%20");
         String url = URL_API + "forecast?" + URL_PARAM_API_KEY + "&q=" + cityName + "&" +
+                URL_PARAM_UNIT + this.unity + "&" + URL_PARAM_LANG + this.language;
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    ForecastModel forecastModel = new ForecastModel(response);
+                    callback.requestSuccess(forecastModel);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.requestError();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO: Handle requestError
+                error.printStackTrace();
+                callback.requestError();
+            }
+        });
+
+        queue.add(jsonObjectRequest);
+    }
+
+    /**
+     * Make an request on API to get forecast weather by the city name.
+     *
+     * @param context Application context.
+     * @param lat Latitude position as String.
+     * @param lng Longitude position as String.
+     * @param callback Interface with functions that return the processed response.
+     */
+    public void requestForecastWeatherByLatLng(Context context, String lat, String lng,
+                                                 final RequestCallback callback){
+        String url = URL_API + "forecast?" + URL_PARAM_API_KEY + "&lat=" + lat + "&lng=" + lng + "&" +
                 URL_PARAM_UNIT + this.unity + "&" + URL_PARAM_LANG + this.language;
 
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -90,8 +129,48 @@ public class OpenWeatherMap {
      */
     public void requestCurrentWeatherByCityName(Context context, String cityName,
                                                         final RequestCallback callback){
+        cityName = cityName.replaceAll(" ", "%20");
         String url = URL_API + "weather?" + URL_PARAM_API_KEY + "&q=" + cityName + "&" +
             URL_PARAM_UNIT + this.unity + "&" + URL_PARAM_LANG + this.language;
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    WeatherModel model = new WeatherModel(response);
+                    callback.requestSuccess(model);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.requestError();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO: Handle requestError
+                error.printStackTrace();
+                callback.requestError();
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjectRequest);
+    }
+
+    /**
+     * Make an request on API to get forecast weather by the city name.
+     *
+     * @param context Application context.
+     * @param lat Latitude position as String.
+     * @param lng Longitude position as String.
+     * @param callback Interface with functions that return the processed response.
+     */
+    public void requestCurrentWeatherByLatLng(Context context, String lat, String lng,
+                                                final RequestCallback callback){
+        String url = URL_API + "weather?" + URL_PARAM_API_KEY + "&lat=" + lat + "&lng=" + lng + "&" +
+                URL_PARAM_UNIT + this.unity + "&" + URL_PARAM_LANG + this.language;
 
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,

@@ -3,9 +3,12 @@ package br.com.weatherapp.ui.fragment.city;
 import android.content.Context;
 import android.view.View;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,7 @@ import br.com.weatherapp.util.UserPreferences;
 public class CityFragmentViewModel extends ViewModel
         implements OpenWeatherMap.RequestCallback, View.OnClickListener {
 
+    private FragmentManager fragmentManager;
     private Context context;
     private String cityName;
     private City city;
@@ -34,21 +38,31 @@ public class CityFragmentViewModel extends ViewModel
     private List<WeatherCard> weatherList;
     private RecyclerView recyclerView;
 
-    public CityFragmentViewModel(Context context, String cityName){
+    public CityFragmentViewModel(Context context, String cityName, FragmentManager fragmentManager){
         this.context = context;
         this.cityName = cityName;
+        this.fragmentManager = fragmentManager;
         this.weatherCard = new WeatherCard();
 
         this.requestData();
     }
 
-    public CityFragmentViewModel(Context context, City city){
+    public CityFragmentViewModel(Context context, City city, FragmentManager fragmentManager){
         this.context = context;
         this.city = city;
         this.cityName = city.name;
+        this.fragmentManager = fragmentManager;
         this.weatherCard = new WeatherCard();
 
         this.requestData();
+    }
+
+    public CityFragmentViewModel(Context context, LatLng latLng, FragmentManager fragmentManager){
+        this.context = context;
+        this.weatherCard = new WeatherCard();
+        this.fragmentManager = fragmentManager;
+
+        this.requestData(latLng);
     }
 
     private void requestData(){
@@ -58,6 +72,17 @@ public class CityFragmentViewModel extends ViewModel
         OpenWeatherMap API = new OpenWeatherMap(unity, lang);
         API.requestCurrentWeatherByCityName(context, cityName, this);
         API.requestForecastWeatherByCityName(context, cityName, this);
+    }
+
+    private void requestData(LatLng latLng){
+        String unity = UserPreferences.getPreference(this.context, UserPreferences.USER_UNITY);
+        String lang = UserPreferences.getPreference(this.context, UserPreferences.USER_LANGUAGE);
+
+        String lat = String.valueOf(latLng.latitude);
+        String lng = String.valueOf(latLng.longitude);
+        OpenWeatherMap API = new OpenWeatherMap(unity, lang);
+        API.requestCurrentWeatherByLatLng(context, lat, lng, this);
+        API.requestForecastWeatherByLatLng(context, lat, lng, this);
     }
 
     public void setBinding(FragmentCityBinding binding) {
@@ -85,7 +110,10 @@ public class CityFragmentViewModel extends ViewModel
 
     @Override
     public void requestSuccess(WeatherModel weatherModel) {
+        if(this.cityName == null || this.cityName.isEmpty())
+            this.cityName = weatherModel.cityName;
         this.weatherCard = new WeatherCard(weatherModel);
+        this.binding.setTitle("Current Weather in " + this.cityName);
         this.binding.setViewModel(this.weatherCard);
     }
 
@@ -106,6 +134,7 @@ public class CityFragmentViewModel extends ViewModel
         Dialog.showAlert(this.context,
                 this.context.getString(R.string.error_connect_title),
                 this.context.getString(R.string.error_connect_text));
+        this.fragmentManager.popBackStack();
     }
 
     @Override
