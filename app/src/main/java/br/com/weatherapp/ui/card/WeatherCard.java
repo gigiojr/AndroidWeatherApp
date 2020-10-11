@@ -4,13 +4,11 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import androidx.databinding.BaseObservable;
-import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import br.com.openweathermapapi.model.WeatherModel;
-import br.com.weatherapp.BR;
 
 /**
  * ViewModel class

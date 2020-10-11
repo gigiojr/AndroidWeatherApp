@@ -20,6 +20,7 @@ import br.com.weatherapp.model.CityDb;
 import br.com.weatherapp.util.Dialog;
 import br.com.weatherapp.ui.adapter.recycler.cityWeather.CityWeatherRecyclerAdapter;
 import br.com.weatherapp.ui.card.WeatherCard;
+import br.com.weatherapp.util.UserPreferences;
 
 public class CityFragmentViewModel extends ViewModel
         implements OpenWeatherMap.RequestCallback, View.OnClickListener {
@@ -38,8 +39,7 @@ public class CityFragmentViewModel extends ViewModel
         this.cityName = cityName;
         this.weatherCard = new WeatherCard();
 
-        OpenWeatherMap.requestCurrentWeatherByCityName(context, cityName, this);
-        OpenWeatherMap.requestForecastWeatherByCityName(context, cityName, this);
+        this.requestData();
     }
 
     public CityFragmentViewModel(Context context, City city){
@@ -48,8 +48,16 @@ public class CityFragmentViewModel extends ViewModel
         this.cityName = city.name;
         this.weatherCard = new WeatherCard();
 
-        OpenWeatherMap.requestCurrentWeatherByCityName(context, cityName, this);
-        OpenWeatherMap.requestForecastWeatherByCityName(context, cityName, this);
+        this.requestData();
+    }
+
+    private void requestData(){
+        String unity = UserPreferences.getPreference(this.context, UserPreferences.USER_UNITY);
+        String lang = UserPreferences.getPreference(this.context, UserPreferences.USER_LANGUAGE);
+
+        OpenWeatherMap API = new OpenWeatherMap(unity, lang);
+        API.requestCurrentWeatherByCityName(context, cityName, this);
+        API.requestForecastWeatherByCityName(context, cityName, this);
     }
 
     public void setBinding(FragmentCityBinding binding) {

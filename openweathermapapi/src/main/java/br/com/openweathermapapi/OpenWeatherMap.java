@@ -23,7 +23,16 @@ public class OpenWeatherMap {
     private static final String URL_ICON = "https://openweathermap.org/img/w/"; // URL to request icon image
     private static final String URL_API = "https://api.openweathermap.org/data/2.5/"; // Base URL
     private static final String URL_PARAM_API_KEY = "APPID=c6e381d8c7ff98f0fee43775817cf6ad"; // ID param
-    private static final String URL_PARAM_UNIT = "units=metric"; // Unit of the response. Default: Kelvin, metric: Celsius, imperial: Fahrenheit
+    private static final String URL_PARAM_UNIT = "units="; // Unit of the response. Default: Kelvin, metric: Celsius, imperial: Fahrenheit
+    private static final String URL_PARAM_LANG = "lang=";
+
+    private String unity;
+    private String language;
+
+    public OpenWeatherMap(String unity, String language){
+        this.unity = unity == null || unity.isEmpty() ? "metric" : unity;
+        this.language = language == null || language.isEmpty() ? "en" : language;
+    }
 
     /**
      * Get complete URL to an icon string from response of request in own API.
@@ -42,10 +51,10 @@ public class OpenWeatherMap {
      * @param cityName Name of city.
      * @param callback Interface with functions that return the processed response.
      */
-    public static void requestForecastWeatherByCityName(Context context, String cityName,
+    public void requestForecastWeatherByCityName(Context context, String cityName,
                                                         final RequestCallback callback){
-        String url = URL_API + "forecast?" + URL_PARAM_API_KEY +
-                "&q=" + cityName + "&" + URL_PARAM_UNIT;
+        String url = URL_API + "forecast?" + URL_PARAM_API_KEY + "&q=" + cityName + "&" +
+                URL_PARAM_UNIT + this.unity + "&" + URL_PARAM_LANG + this.language;
 
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,
@@ -79,10 +88,10 @@ public class OpenWeatherMap {
      * @param cityName Name of city.
      * @param callback Interface with functions that return the processed response.
      */
-    public static void requestCurrentWeatherByCityName(Context context, String cityName,
+    public void requestCurrentWeatherByCityName(Context context, String cityName,
                                                         final RequestCallback callback){
-        String url = URL_API + "weather?" + URL_PARAM_API_KEY +
-                "&q=" + cityName + "&" + URL_PARAM_UNIT;
+        String url = URL_API + "weather?" + URL_PARAM_API_KEY + "&q=" + cityName + "&" +
+            URL_PARAM_UNIT + this.unity + "&" + URL_PARAM_LANG + this.language;
 
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,

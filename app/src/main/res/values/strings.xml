@@ -12,4 +12,8 @@
 
     <string name="confirm_delete_title">Delete Favorite</string>
     <string name="confirm_delete_text">The city register will be removed permanently. Would you like to continue?</string>
+
+    <string name="setting_units">Units of measurement</string>
+    <string name="setting_language">Language</string>
+    <string name="setting_save">Save</string>
 </resources>
